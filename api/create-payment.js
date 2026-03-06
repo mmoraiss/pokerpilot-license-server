@@ -36,6 +36,13 @@ email: "cliente@email.com"
 
 const data = await response.json()
 
+if (!data.point_of_interaction) {
+  return res.status(500).json({
+    error: "Mercado Pago error",
+    response: data
+  })
+}
+
 return res.status(200).json({
 qr: `data:image/png;base64,${data.point_of_interaction.transaction_data.qr_code_base64}`,
 pix: data.point_of_interaction.transaction_data.qr_code
