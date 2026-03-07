@@ -43,8 +43,11 @@ pix: data.point_of_interaction.transaction_data.qr_code
 
 } catch (error) {
 
+console.log("ERRO CREATE PAYMENT:", error)
+
 return res.status(500).json({
-error: error.message
+error: "Erro ao criar pagamento",
+details: error.message
 })
 
 }
