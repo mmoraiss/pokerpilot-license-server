@@ -16,7 +16,8 @@ try {
 
 const accessToken = process.env.MP_ACCESS_TOKEN
 
-const { clubId } = req.body
+const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body
+const clubId = body?.clubId || "CLUBE"
 
 const response = await fetch("https://api.mercadopago.com/v1/payments", {
 method: "POST",
