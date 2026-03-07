@@ -35,12 +35,12 @@ headers:{
 "X-Idempotency-Key": crypto.randomUUID()
 },
 body:JSON.stringify({
-transaction_amount:97,
+transaction_amount:2,
 description:`Licença Poker Pilot - Clube ${clubId}`,
 payment_method_id:"pix",
 
   metadata:{
-clubId:clubId
+clubId: clubId
 },
   
 payer:{
