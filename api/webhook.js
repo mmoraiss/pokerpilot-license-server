@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 
       if (payment.status === "approved") {
 
-        const clubId = payment.metadata?.clubId
+        const clubId = payment.metadata?.clubId || "DESCONHECIDO"
 
         console.log("Pagamento aprovado do clube:", clubId)
 
