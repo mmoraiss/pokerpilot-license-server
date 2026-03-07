@@ -1,3 +1,28 @@
+import { initializeApp, cert } from "firebase-admin/app"
+import { getFirestore } from "firebase-admin/firestore"
+
+let db
+
+if (!global.firebase) {
+
+  const app = initializeApp({
+    credential: cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+    })
+  })
+
+  db = getFirestore(app)
+
+  global.firebase = db
+
+} else {
+
+  db = global.firebase
+
+}
+
 export default async function handler(req, res) {
 
   if (req.method !== "POST") {
@@ -29,12 +54,39 @@ export default async function handler(req, res) {
 
       if (payment.status === "approved") {
 
-        const clubId = payment.metadata?.clubId || "DESCONHECIDO"
+        const clubId = payment.metadata?.clubId || null
 
         console.log("Pagamento aprovado do clube:", clubId)
 
-        // aqui depois vamos salvar a licença
-        // por enquanto apenas confirma
+        if (clubId) {
+
+          const licenseRef = db.collection("licenses").doc(clubId)
+
+          const snap = await licenseRef.get()
+
+          const now = Date.now()
+          const plus30days = now + (30 * 24 * 60 * 60 * 1000)
+
+          if (snap.exists) {
+
+            const data = snap.data()
+
+            let newExpire = plus30days
+
+            if (data.expiresAt && data.expiresAt > now) {
+              newExpire = data.expiresAt + (30 * 24 * 60 * 60 * 1000)
+            }
+
+            await licenseRef.update({
+              status: "ACTIVE",
+              expiresAt: newExpire
+            })
+
+            console.log("Licença atualizada até:", newExpire)
+
+          }
+
+        }
 
       }
 
