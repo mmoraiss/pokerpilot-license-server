@@ -16,8 +16,14 @@ export default async function handler(req, res) {
 
     const accessToken = process.env.MP_ACCESS_TOKEN
 
-    // garante que sempre exista um clubId
-    const clubId = req.body?.clubId || "TESTE"
+    // parse seguro do body
+    let body = req.body
+
+    if (typeof body === "string") {
+      body = JSON.parse(body)
+    }
+
+    const clubId = body?.clubId || "CLUBE"
 
     const response = await fetch("https://api.mercadopago.com/v1/payments", {
       method: "POST",
