@@ -27,21 +27,22 @@ export default async function handler(req, res) {
 
     const clubId = body.clubId || "TESTE"
 
-    const response = await fetch("https://api.mercadopago.com/v1/payments", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${accessToken}`
-      },
-      body: JSON.stringify({
-        transaction_amount: 97,
-        description: `Licença Poker Pilot - Clube ${clubId}`,
-        payment_method_id: "pix",
-        payer: {
-          email: "cliente@pokerpilot.com"
-        }
-      })
-    })
+    const response = await fetch("https://api.mercadopago.com/v1/payments",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":`Bearer ${accessToken}`,
+"X-Idempotency-Key": crypto.randomUUID()
+},
+body:JSON.stringify({
+transaction_amount:97,
+description:`Licença Poker Pilot - Clube ${clubId}`,
+payment_method_id:"pix",
+payer:{
+email:"cliente@pokerpilot.com"
+}
+})
+})
 
     const data = await response.json()
 
