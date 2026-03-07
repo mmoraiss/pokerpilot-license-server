@@ -38,6 +38,11 @@ body:JSON.stringify({
 transaction_amount:97,
 description:`Licença Poker Pilot - Clube ${clubId}`,
 payment_method_id:"pix",
+
+  metadata:{
+clubId:clubId
+},
+  
 payer:{
 email:"cliente@pokerpilot.com"
 }
