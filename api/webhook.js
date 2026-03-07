@@ -1,25 +1,24 @@
 export default async function handler(req, res) {
 
-  res.setHeader("Access-Control-Allow-Origin", "*")
-
   if (req.method !== "POST") {
     return res.status(200).send("ok")
   }
 
-  try {
+  const body = req.body
 
-    const body = req.body
+  console.log("Webhook recebido:", body)
 
-    console.log("Webhook recebido:", body)
+  if (body.type === "payment") {
 
-    return res.status(200).send("ok")
+    const paymentId = body.data.id
 
-  } catch (error) {
+    console.log("Pagamento recebido:", paymentId)
 
-    console.log("Erro webhook:", error)
-
-    return res.status(500).send("erro")
+    // aqui depois vamos consultar o pagamento
+    // e ativar a licença
 
   }
+
+  res.status(200).send("ok")
 
 }
