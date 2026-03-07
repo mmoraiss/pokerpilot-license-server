@@ -39,10 +39,12 @@ transaction_amount:2,
 description:`Licença Poker Pilot - Clube ${clubId}`,
 payment_method_id:"pix",
 
-  metadata:{
+external_reference: clubId,
+
+metadata:{
 clubId: clubId
 },
-  
+
 payer:{
 email:"cliente@pokerpilot.com"
 }
